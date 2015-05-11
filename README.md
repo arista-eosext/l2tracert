@@ -1,7 +1,7 @@
 #l2tracert
 
 
-The purpose of this script is to provide a traceroute function but at layer 2 specficially across Arista switches. 
+The purpose of this script is to provide a traceroute function but at layer 2 specifically across Arista switches. 
 
 
 #Author
