@@ -9,8 +9,8 @@ Jeremy Georges - Arista Networks   - jgeorges@arista.com
 
 #Description
 The l2tracert script provides a mechanism to traceroute a path through Arista switches at layer 2. By using a combination of 
-the output of the 'show mac address-table' command and LLDP Neighbor information, the targetted MAC address can be
-anaylzed on a hop-by-hop (switch-by-switch) basis. The script output provides an layer 2 route from beginning to final egress switch port.
+the output of the 'show mac address-table' command and LLDP Neighbor information, the targeted MAC address can be
+analyzed on a hop-by-hop (switch-by-switch) basis. The script output provides an layer 2 route from beginning to final egress switch port.
 In large Layer 2 environments, this can be helpful to understand each switch and physical interface  that is used to reach
 a specific mac address, especially when troubleshooting.
 
@@ -27,7 +27,7 @@ since this is the IP that shows up in the LLDP management IP field.
 A user account must be created that has enough privilege to run the 'show mac address-table' and 'show lldp' commands.
 Either the variables DEFAULTUSER and DEFAULTPW will need to be set in the script or command line arguments can be specified.
 
-To make it easier to execute from EOS, an alias can be setup to provide those required authentication paramenters.
+To make it easier to execute from EOS, an alias can be setup to provide those required authentication parameters.
 For example:
 
 
