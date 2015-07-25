@@ -74,7 +74,7 @@
 
 """
 
-VERSION='1.1'
+VERSION='1.2'
 DEFAULTUSER='admin'
 DEFAULTPW='4me2know'
 
