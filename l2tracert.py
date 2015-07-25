@@ -29,7 +29,7 @@
 #
 #L2TRACERT
 #
-#    Version 1.1  - 5/5/2015 
+#    Version 1.2  - 7/21/2015 
 #    Written by: 
 #       Jeremy Georges - Arista Networks
 #       jgeorges@arista.com
@@ -37,6 +37,7 @@
 #    Revision history:
 #       1.0 - initial release - 4/29/2015
 #       1.1 - Added MAC and VLAN validation. Fixed minor bug. - 5/5/2015
+#       1.2 - Added additional logic for Port-channels - 7/21/2015
 
 """ l2tracert 
     The purpose of this script is to provide a traceroute function but at layer 2. The user must specify a destination MAC address
@@ -75,7 +76,7 @@
 
 VERSION='1.1'
 DEFAULTUSER='admin'
-DEFAULTPW='password'
+DEFAULTPW='4me2know'
 
 
 #=====================================================
@@ -152,9 +153,31 @@ def switchparse(switch,mac,vlan):
     # are any more next hop switches to analyze. But they should be able to ascertain this by the 'system name'.
  
     lldplist=[]
-    lldplist.append(("".join(egressinterface)))  
-    showlldpneighbor = switch.runCmds( 1,[ "enable","show lldp neighbors %s detail" % (egressinterface) ],"text")
-    switchneighbor=showlldpneighbor[1] ["output"]
+    # Since the show lldp neighbors command does not support port-channels (since this is a link level protocol)
+    # we need to add additional logic to check the lldp neighbor of one of the member interfaces of the port-channel.
+    # That should be sufficient for our needs.
+    
+    if re.findall("Ethernet.*", egressinterface): 
+        lldplist.append(("".join(egressinterface)))  
+        showlldpneighbor = switch.runCmds( 1,[ "enable","show lldp neighbors %s detail" % (egressinterface) ],"text")
+        switchneighbor=showlldpneighbor[1] ["output"]
+    elif re.findall("Port-Channel.*", egressinterface):
+        #We need to look at the LLDP neighbor on just one member interface. Lets just look at the first one, that
+        #should be sufficient. 
+        try:
+            showportchannel = switch.runCmds( 1,[ "enable","show interfaces %s " % (egressinterface) ],"json")
+        except:
+            print "Issue with parsing Port Channel Members"
+            return 0 
+        #First member interface listed should be listed as first one
+        phyegressinterfaces=showportchannel[1]['interfaces'][egressinterface]['memberInterfaces'].keys()[0]
+        #append the egressint to our list which will be displayed as the port-channel here.
+        lldplist.append(("".join(egressinterface)))
+        #Here we need to override that and use the first member interface of our port-channel for the lldp 
+        #neighbor command.
+        showlldpneighbor = switch.runCmds( 1,[ "enable","show lldp neighbors %s detail" % (phyegressinterfaces) ],"text")
+        switchneighbor=showlldpneighbor[1] ["output"]
+
     if  re.findall("Port ID     :.*", switchneighbor):
         currentneighborport = re.findall("Port ID     :.*", switchneighbor)
     else: 
