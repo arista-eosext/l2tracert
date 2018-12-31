@@ -1,13 +1,13 @@
-#l2tracert
+# l2tracert
 
 
 The purpose of this script is to provide a traceroute function but at layer 2 specifically across Arista switches. 
 
 
-#Author
+# Author
 Jeremy Georges - Arista Networks   - jgeorges@arista.com
 
-#Description
+# Description
 The l2tracert script provides a mechanism to traceroute a path through Arista switches at layer 2. By using a combination of 
 the output of the 'show mac address-table' command and LLDP Neighbor information, the targeted MAC address can be
 analyzed on a hop-by-hop (switch-by-switch) basis. The script output provides an layer 2 route from beginning to final egress switch port.
@@ -46,16 +46,16 @@ Now the alias l2trace can be used instead of having to type the username and pas
     2            7050QX           Ethernet33       7048-LAB-R1      Ethernet49
     3            7048-LAB-R1      Ethernet48       NA
 
-##Example
+## Example
 
-###Output if MAC is not learned
+### Output if MAC is not learned
 
 
     [admin@7050S-64 flash]$ ./l2tracert.py -m 000e.c687.8c93 -v 1 -u admin -p 4me2know
     MAC Address not found!
 
 
-###Ping it first so mac is learned...
+### Ping it first so mac is learned...
 
 
     [admin@7050S-64 flash]$ ping 192.168.100.4
@@ -72,7 +72,7 @@ Now the alias l2trace can be used instead of having to type the username and pas
     Appears that the next switch does not have EAPI enabled.
 
 
-##Enable EAP on the last switch 7048...
+## Enable EAP on the last switch 7048...
 
 
     [admin@7050S-64 flash]$ ./l2tracert.py -u admin -p 4me2know -m 000e.c687.8c93 -v 1
@@ -85,7 +85,7 @@ Now the alias l2trace can be used instead of having to type the username and pas
     3            7048-LAB-R1      Ethernet48       NA                               
 
 
-#INSTALLATION:
+# INSTALLATION:
 Copy to the /mnt/flash directory of each Arista switch that you want to use l2tracert.
 
 
